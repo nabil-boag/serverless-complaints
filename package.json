@@ -4,6 +4,7 @@
   "description": "",
   "main": "handler.js",
   "dependencies": {
+    "aws-sdk": "^2.325.0",
     "graphql": "^14.0.2"
   },
   "devDependencies": {},
