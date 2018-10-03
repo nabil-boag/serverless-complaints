@@ -1,31 +1,103 @@
-service: serverless-node-graphql-db-email 
+service: serverless-complaints
 
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
-# frameworkVersion: "=X.X.X"
+# # You can pin your service to only deploy with a specific Serverless version
+# # Check out our docs for more details
+# # frameworkVersion: "=X.X.X"
 custom:
   secrets: ${file(secrets.json)}
+  serverless-offline:
+    port: 4200
+    host: 0.0.0.0
+    region: "eu-west-1"
+    useSeparateProcesses: true
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: offline/migrations
+  serverless-offline-sns:
+    port: 4002
+    debug: false
+    accountId: 108610331730
+    # host: 0.0.0.0
   
 provider:
   name: aws
   runtime: nodejs8.10
   stage: ${self:custom.secrets.NODE_ENV}
-  region: eu-west-1
+  region: "eu-west-1"
   environment: 
     NODE_ENV: ${self:custom.secrets.NODE_ENV}
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     FROM_EMAIL: ${self:custom.secrets.FROM_EMAIL}
-  
+    REPLY_TO_EMAIL: ${self:custom.secrets.REPLY_TO_EMAIL}
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: Allow
       Action:
-        - "ses:SendEmail"
+        - dynamodb:GetItem
+        - dynamodb:Scan
+        - dynamodb:Scan
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+    - Effect: "Allow"
       Resource: "*"
-
+      Action:
+        - "sns:*"
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: "*"
+        
 functions:
-  query:
-    handler: handler.query
+  graphql:
+    handler: complaints/handler.server
     events:
-      - http:
-          path: query
-          method: get
-          cors: true
+    - http:
+        path: /
+        method: post
+        cors: true
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+  playground:
+    handler: complaints/handler.playground
+    events:
+    - http:
+        path: /
+        method: get
+        cors: true
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+        
+  sendComplaintRegistrationEmail:
+    handler: email/handler.sendComplaintRegistrationEmail
+    events:
+      - sns: complaintCreated
+        
+resources:
+  Resources:
+    ComplaintsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline-sns
+  - serverless-offline
+     

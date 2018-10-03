@@ -1,16 +1,27 @@
 {
-  "name": "serverless-node-graphql-db-email",
+  "name": "serverless-complaints",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",
-  "dependencies": {
-    "aws-sdk": "^2.325.0",
-    "graphql": "^14.0.2"
-  },
-  "devDependencies": {},
   "scripts": {
+    "install" : "serverless dynamodb install",
+    "start": "serverless offline start",
+    "deploy": "serverless deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "keywords": [],
+  "author": "Nabil Boag <nabilboag@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.326.0",
+    "dynamodb": "^1.1.2",
+    "graphql-yoga": "*",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "serverless": "^1.32.0",
+    "serverless-dynamodb-local": "^0.2.35",
+    "serverless-offline-sns": "^0.48.0",
+    "serverless-offline": "^3.25.17"
+  }
 }
