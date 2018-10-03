@@ -5,7 +5,6 @@ provider "aws" {
 
 resource "aws_ses_template" "ComplaintRegistrationEmail" {
   name    = "ComplaintRegistrationEmail"
-  subject = "Greetings, {{name}}!"
+  subject = "Your claim has been submitted"
   html    = "${file("complaint-registration-email-template.tpl.html")}"
 }
-

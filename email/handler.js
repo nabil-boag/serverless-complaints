@@ -6,7 +6,7 @@ module.exports.sendComplaintRegistrationEmail = (event, context, callback) => {
   const data = JSON.parse(event.Records[0].Sns.Message);
 
   const params = {
-    Destination: { 
+    Destination: {
       CcAddresses: [
         data.originalCustomerEmail
       ],
@@ -26,10 +26,11 @@ module.exports.sendComplaintRegistrationEmail = (event, context, callback) => {
 
   return ses.sendTemplatedEmail(params).promise()
     .then((data) => {
-      console.log('Email sent');
+      console.log('Email sent', data, params);
       callback(null, {});
-    }).catch((err) => { 
+    }).catch((err) => {
       console.error('Email failed to send', err);
       callback(null, err);
     });
 };
+

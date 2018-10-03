@@ -29,13 +29,13 @@ const resolvers = {
       };
       
       try {
-        console.log('Retrieve all complaints completed.', params);
-        // console.log('Attempting to retrieve all complaints.');
+        // console.log(`Attempting to retrieve complaint with id ${id}.`);
         const result = await dynamodb.get(params).promise();
+        // console.log('Retrieve complaint completed.', params);
         
         return result.Item;
       } catch (e) {
-        console.error('Error retrieving complaints.');
+        // console.error('Error retrieving complaint.');
         throw new Error('Error retrieving complaint');
       }
     },

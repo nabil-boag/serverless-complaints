@@ -39,3 +39,12 @@ terraform apply
 serverless deploy
 ```
 
+## Tearing down
+
+```bash
+terraform destroy
+```
+
+```bash
+serverless remove
+```

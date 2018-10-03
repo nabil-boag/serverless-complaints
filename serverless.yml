@@ -21,7 +21,6 @@ custom:
     port: 4002
     debug: false
     accountId: 108610331730
-    # host: 0.0.0.0
   
 provider:
   name: aws
@@ -76,7 +75,7 @@ functions:
     handler: email/handler.sendComplaintRegistrationEmail
     events:
       - sns: complaintCreated
-        
+      
 resources:
   Resources:
     ComplaintsDynamoDbTable:
