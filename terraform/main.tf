@@ -8,3 +8,4 @@ resource "aws_ses_template" "ComplaintRegistrationEmail" {
   subject = "Your claim has been submitted"
   html    = "${file("complaint-registration-email-template.tpl.html")}"
 }
+

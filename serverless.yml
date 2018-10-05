@@ -27,6 +27,13 @@ custom:
     port: 4002
     debug: false
     accountId: 108610331730
+  customDomain:
+    domainName: ${self:custom.secrets.DOMAIN} 
+    basePath: 'api'
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+    certificateName: '*.nowaitr.com'
+    endpointType: 'regional'
   
 provider:
   name: aws
@@ -97,7 +104,8 @@ resources:
   Resources:
     ComplaintsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      # @TODO Change this to retain in future
+      DeletionPolicy: Delete
       Properties:
         AttributeDefinitions:
         - AttributeName: id
@@ -123,7 +131,8 @@ resources:
             WriteCapacityUnits: 1
     CustomersDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      # @TODO Change this to retain in future
+      DeletionPolicy: Delete
       Properties:
         AttributeDefinitions:
         - AttributeName: originalCustomerAccountId
@@ -189,4 +198,5 @@ plugins:
   - serverless-dynamodb-local
   - serverless-offline-sns
   - serverless-offline
+  - serverless-domain-manager
      

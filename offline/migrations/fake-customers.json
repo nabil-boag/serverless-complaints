@@ -1,0 +1,16 @@
+[
+  {
+  	"originalCustomerAccountId": "c3640040-c880-11e8-88a3-b31a549685a3",
+ 	  "originalCustomerDateOfBirth": "1968-06-01",
+	  "originalCustomerEmail": "acustomer@nabilboag.co.uk",
+	  "originalCustomerMobilePhoneNumer": "07783980512",
+	  "originalCustomerPostCode": "SW120BW"
+  },
+  {
+  	"originalCustomerAccountId": "c3640040-c880-11e8-88a3-b31a549685a4",
+ 	  "originalCustomerDateOfBirth": "1968-06-01",
+	  "originalCustomerEmail": "bcustomer@nabilboag.co.uk",
+	  "originalCustomerMobilePhoneNumer": "07783980513",
+	  "originalCustomerPostCode": "SW120BW"
+  }
+]

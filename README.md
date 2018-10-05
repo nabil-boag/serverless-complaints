@@ -43,6 +43,17 @@ terraform apply
 serverless deploy
 ```
 
+### Deploy Domain
+
+Manage with the [serverless domain manager](https://github.com/amplify-education/serverless-domain-manager)
+
+If you have registered your domain with Route 53 and hav genereated certificates
+you can deploy these with:
+
+```bash
+serverless create_domain
+```
+
 ## Tearing down
 
 ```bash
@@ -52,3 +63,4 @@ terraform destroy
 ```bash
 serverless remove
 ```
+

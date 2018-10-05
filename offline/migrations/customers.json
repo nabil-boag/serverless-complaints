@@ -1,0 +1,21 @@
+{
+    "Table": {
+        "TableName": "complaints-portal-customers-dev",
+        "KeySchema": [
+            {
+                "AttributeName": "originalCustomerAccountId",
+                "KeyType": "HASH"
+            }
+        ],
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "originalCustomerAccountId",
+                "AttributeType": "S"
+            }
+        ],
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
+        }
+    }
+}

@@ -422,6 +422,20 @@ aws-sdk@^*, aws-sdk@^2.186.x, aws-sdk@^2.228.0, aws-sdk@^2.233.1, aws-sdk@^2.326
     uuid "3.1.0"
     xml2js "0.4.19"
 
+aws-sdk@^2.177.0:
+  version "2.328.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.328.0.tgz#5b9320f9dad3125af5ebac08b11eb0e66343a6d5"
+  dependencies:
+    buffer "4.9.1"
+    events "1.1.1"
+    ieee754 "1.1.8"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    uuid "3.1.0"
+    xml2js "0.4.19"
+
 b64@3.x.x:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/b64/-/b64-3.0.3.tgz#36afeee0d9345f046387ce6de8a6702afe5bb56e"
@@ -2584,6 +2598,13 @@ serve-static@1.13.2:
     escape-html "~1.0.3"
     parseurl "~1.3.2"
     send "0.16.2"
+
+serverless-domain-manager@^2.6.5:
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/serverless-domain-manager/-/serverless-domain-manager-2.6.5.tgz#901513e2e388a557d60098f528beaba07d484e01"
+  dependencies:
+    aws-sdk "^2.177.0"
+    chalk "^2.0.1"
 
 serverless-dynamodb-local@^0.2.35:
   version "0.2.35"
