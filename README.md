@@ -1,5 +1,7 @@
 # Serverless GraphQL API with DynamoDB and offline support
 
+[![Build Status](https://travis-ci.com/nabil-boag/serverless-complaints.svg?branch=master)](https://travis-ci.com/nabil-boag/serverless-complaints)
+
 A serverless AWS Lambda GraphQL Yoga API back by DynamoDB. When complaints
 are created SNS messages are published. SNS events trigger a Lambda that 
 sends an email via SES.
