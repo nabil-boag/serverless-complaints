@@ -26,11 +26,10 @@ module.exports.sendComplaintRegistrationEmail = (event, context, callback) => {
 
   return ses.sendTemplatedEmail(params).promise()
     .then((data) => {
-      console.log('Email sent', data, params);
+      console.log('Email sent');
       callback(null, {});
     }).catch((err) => {
       console.error('Email failed to send', err);
       callback(null, err);
     });
-};
-
+}

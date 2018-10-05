@@ -1,4 +1,4 @@
-service: serverless-complaints
+service: complaints-portal
 
 # # You can pin your service to only deploy with a specific Serverless version
 # # Check out our docs for more details
@@ -15,6 +15,12 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
+      seed: true
+    seed:
+      customers:
+        sources:
+          - table: ${self:provider.environment.DYNAMODB_CUSTOMER_TABLE}
+            sources: ["./offline/migrations/fake-customers.json"]
     migration:
       dir: offline/migrations
   serverless-offline-sns:
@@ -29,25 +35,36 @@ provider:
   region: "eu-west-1"
   environment: 
     NODE_ENV: ${self:custom.secrets.NODE_ENV}
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    DYNAMODB_COMPLAINTS_TABLE: ${self:service}-complaints-${opt:stage, self:provider.stage}
+    DYNAMODB_CUSTOMER_TABLE: ${self:service}-customers-${opt:stage, self:provider.stage}
     FROM_EMAIL: ${self:custom.secrets.FROM_EMAIL}
     REPLY_TO_EMAIL: ${self:custom.secrets.REPLY_TO_EMAIL}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:GetItem
-        - dynamodb:Scan
-        - dynamodb:Scan
         - dynamodb:PutItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_COMPLAINTS_TABLE}"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_COMPLAINTS_TABLE}/index/*"
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_CUSTOMER_TABLE}"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_CUSTOMER_TABLE}/index/*"
     - Effect: "Allow"
       Resource: "*"
       Action:
         - "sns:*"
-    - Effect: Allow
-      Action:
-        - lambda:InvokeFunction
+    - Effect: "Allow"
       Resource: "*"
+      Action:
+        - "ses:SendTemplatedEmail"
         
 functions:
   graphql:
@@ -83,18 +100,91 @@ resources:
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          -
-            AttributeName: id
-            AttributeType: S
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: originalCustomerAccountId
+          AttributeType: S
         KeySchema:
-          -
-            AttributeName: id
-            KeyType: HASH
+        - AttributeName: id
+          KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
-        
+        TableName: ${self:provider.environment.DYNAMODB_COMPLAINTS_TABLE}
+        GlobalSecondaryIndexes:
+        - IndexName: accountid
+          KeySchema:
+          - AttributeName: originalCustomerAccountId
+            KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+    CustomersDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+        - AttributeName: originalCustomerAccountId
+          AttributeType: S
+        - AttributeName: originalCustomerEmail
+          AttributeType: S
+        - AttributeName: originalCustomerDateOfBirth
+          AttributeType: S
+        - AttributeName: originalCustomerPostCode
+          AttributeType: S
+        - AttributeName: originalCustomerMobilePhoneNumer
+          AttributeType: S
+        KeySchema:
+        - AttributeName: originalCustomerAccountId
+          KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_CUSTOMER_TABLE}
+        GlobalSecondaryIndexes:
+        - IndexName: originalCustomerEmailDateOfBirth
+          KeySchema:
+          - AttributeName: originalCustomerEmail
+            KeyType: HASH
+          - AttributeName: originalCustomerDateOfBirth
+            KeyType: RANGE
+          Projection:
+            NonKeyAttributes:
+            - originalCustomerAccountId
+            ProjectionType: INCLUDE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - IndexName: originalCustomerPostCodeDateOfBirth
+          KeySchema:
+          - AttributeName: originalCustomerPostCode
+            KeyType: HASH
+          - AttributeName: originalCustomerDateOfBirth
+            KeyType: RANGE
+          Projection:
+            NonKeyAttributes:
+            - originalCustomerAccountId
+            ProjectionType: INCLUDE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - IndexName: originalCustomerMobilePhoneNumerDateOfBirth
+          KeySchema:
+          - AttributeName: originalCustomerMobilePhoneNumer
+            KeyType: HASH
+          - AttributeName: originalCustomerDateOfBirth
+            KeyType: RANGE
+          Projection:
+            NonKeyAttributes:
+            - originalCustomerAccountId
+            ProjectionType: INCLUDE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+    
+      
 plugins:
   - serverless-dynamodb-local
   - serverless-offline-sns

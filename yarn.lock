@@ -409,8 +409,8 @@ aws-lambda@^0.1.2:
     dotenv "^0.4.0"
 
 aws-sdk@^*, aws-sdk@^2.186.x, aws-sdk@^2.228.0, aws-sdk@^2.233.1, aws-sdk@^2.326.0, aws-sdk@^2.7.0:
-  version "2.326.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.326.0.tgz#2a8c036bdf3dbc67ccafab4c3deb9b4dfe89ce8f"
+  version "2.327.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.327.0.tgz#0192f71f764182bd2f81a65851071ed5265121bd"
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -2607,8 +2607,8 @@ serverless-offline-sns@^0.48.0:
     xml "^1.0.1"
 
 serverless-offline@^3.25.17:
-  version "3.25.17"
-  resolved "https://registry.yarnpkg.com/serverless-offline/-/serverless-offline-3.25.17.tgz#8814c250ba89af37b64b1ed06d411110ce176be3"
+  version "3.26.0"
+  resolved "https://registry.yarnpkg.com/serverless-offline/-/serverless-offline-3.26.0.tgz#b9d9ace4ebe9a27123fe3f484696b842d9511a4e"
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/register" "^7.0.0"

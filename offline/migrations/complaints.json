@@ -1,6 +1,6 @@
 {
     "Table": {
-        "TableName": "serverless-complaints-dev",
+        "TableName": "complaints-portal-complaints-dev",
         "KeySchema": [
             {
                 "AttributeName": "id",
