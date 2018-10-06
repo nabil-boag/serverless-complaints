@@ -24,21 +24,10 @@ the GraphQL playground
 
 ## Deploy 
 
-### Prerquisites
+### Prerequisites
 
 * An AWS account with IAM user able to create resources
 * A registered Simple Email Service domain. 
-* Install Terraform, Serverless and AWS cli
-
-### Create resources with Terraform
-
-Some resources can't be created by Serverless so we use terraform. 
-
-```bash
-cd terraform
-terraform init
-terraform apply
-```
 
 ### Deploy Serverless Stack
 
@@ -60,17 +49,19 @@ serverless create_domain
 
 ## Tearing down
 
+Remove email template
+
 ```bash
-terraform destroy
+sls ses-template deploy
+```
+Remove any API Gateway domains
+
+```bash
+serverless delete_domain
 ```
 
 ```bash
 serverless remove
 ```
 
-Remove any API Gateway domains
-
-```bash
-serverless delete_domain
-```
 
