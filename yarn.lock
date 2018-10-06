@@ -125,6 +125,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@haftahave/serverless-ses-template@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@haftahave/serverless-ses-template/-/serverless-ses-template-1.0.5.tgz#f9ce34e1a2930bd803475895ef247a7700f8c225"
+
 "@serverless/platform-sdk@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@serverless/platform-sdk/-/platform-sdk-0.3.0.tgz#335adeb2759760e4232c321d72b4022e4dce7818"

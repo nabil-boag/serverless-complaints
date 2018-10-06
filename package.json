@@ -4,7 +4,7 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "install": "serverless dynamodb install",
+    "install": "serverless dynamodb install && sls ses-template deploy",
     "start": "serverless offline start",
     "deploy": "serverless deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +13,7 @@
   "author": "Nabil Boag <nabilboag@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@haftahave/serverless-ses-template": "^1.0.5",
     "aws-sdk": "^2.326.0",
     "dynamodb": "^1.1.2",
     "graphql-yoga": "*",

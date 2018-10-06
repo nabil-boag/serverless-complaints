@@ -6,6 +6,8 @@ A serverless AWS Lambda GraphQL Yoga API back by DynamoDB. When complaints
 are created SNS messages are published. SNS events trigger a Lambda that 
 sends an email via SES.
 
+[Demo API available here](https://nowaitr.com/api)
+
 ## Local development
 
 ### Setup
@@ -64,5 +66,11 @@ terraform destroy
 
 ```bash
 serverless remove
+```
+
+Remove any API Gateway domains
+
+```bash
+serverless delete_domain
 ```
 

@@ -32,8 +32,9 @@ custom:
     basePath: 'api'
     stage: ${self:provider.stage}
     createRoute53Record: true
-    certificateName: '*.nowaitr.com'
+    certificateName: 'nowaitr.com'
     endpointType: 'regional'
+  sesTemplatesConfigFile: './email/template.js'  
   
 provider:
   name: aws
@@ -199,4 +200,5 @@ plugins:
   - serverless-offline-sns
   - serverless-offline
   - serverless-domain-manager
+  - '@haftahave/serverless-ses-template'
      
