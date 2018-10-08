@@ -4,9 +4,9 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "install": "serverless dynamodb install && sls ses-template deploy",
+    "install": "serverless dynamodb install && serverless ses-template deploy",
     "start": "serverless offline start",
-    "deploy": "serverless deploy",
+    "deploy": "sls create_domain && sls ses-template deploy&& sls deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
