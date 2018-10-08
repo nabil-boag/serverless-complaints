@@ -17,6 +17,7 @@
     "aws-sdk": "^2.326.0",
     "dynamodb": "^1.1.2",
     "graphql-yoga": "*",
+    "recaptcha-validator": "^2.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

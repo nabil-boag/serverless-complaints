@@ -47,6 +47,9 @@ provider:
     DYNAMODB_CUSTOMER_TABLE: ${self:service}-customers-${opt:stage, self:provider.stage}
     FROM_EMAIL: ${self:custom.secrets.FROM_EMAIL}
     REPLY_TO_EMAIL: ${self:custom.secrets.REPLY_TO_EMAIL}
+    RECAPTCHA_URL: "https://www.google.com/recaptcha/api/siteverify"
+    RECAPTCHA_SITE_KEY: ${self:custom.secrets.RECAPTCHA_SITE_KEY} 
+    RECAPTCHA_SECRET_KEY: ${self:custom.secrets.RECAPTCHA_SECRET_KEY}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -100,6 +103,18 @@ functions:
     handler: email/handler.sendComplaintRegistrationEmail
     events:
       - sns: complaintCreated
+  
+  sendComplaintRegistrationEmailOriginal:
+    handler: email/handler.sendComplaintRegistrationEmailOriginal
+    events:
+      - sns: complaintCreated
+      
+  landingPage:
+    handler: frontend/handler.landingPage
+    events:
+      - http:
+          method: get
+          path: "landing-page"
       
 resources:
   Resources:

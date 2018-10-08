@@ -2458,6 +2458,12 @@ readable-stream@^2.0.0, readable-stream@^2.0.5, readable-stream@^2.0.6, readable
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
+recaptcha-validator@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/recaptcha-validator/-/recaptcha-validator-2.0.0.tgz#431044c4fc727ccf5890cea4a08787a8b5c0bc02"
+  dependencies:
+    debug "^2.2.0"
+
 regenerator-runtime@^0.10.5:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"

@@ -24,6 +24,7 @@ const typeDefs = `
   
   type Mutation {
     createComplaint(
+      recaptchaToken: String!,
     	complaintSubmitterEmail: String!, 
   	  complaintSubmitterName: String!,
   	  isComplaintSubmitterTheOriginalCustomer: Boolean!,
@@ -33,6 +34,7 @@ const typeDefs = `
   	  originalCustomerLastName: String!, 
   	  originalCustomerMobilePhoneNumber: String, 
   	  originalCustomerPostCode: String, 
+  	  
     ): Complaint!,
     createCustomer(
       originalCustomerAccountId: String!,

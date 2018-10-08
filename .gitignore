@@ -6,3 +6,4 @@ jspm_packages
 .serverless
 .yarn-error.log
 .dynamodb
+yarn-error.log

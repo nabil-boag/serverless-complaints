@@ -1,12 +1,27 @@
 const uuid = require('uuid');
 const dynamodb = require('./dynamodb');
 const sns = require('./sns');
+const recaptcha = require('../recaptcha/recaptcha');
 
 async function createComplaint(parent, args, context) {
+	// Check recaptcha
+	try {
+		let sourceIp = undefined;
+		if (context.identity && context.identity.sourceIp) {
+			sourceIp = context.identity.sourceIp;
+		}
+		await recaptcha.verify(args.recaptchaToken, sourceIp);
+		delete args.recaptchaToken;
+	}
+	catch (e) {
+		console.error('Error trying to create a complaint.', e);
+		throw e
+	}
+
 	const timestamp = new Date().getTime();
 
 	const accountId = await getAccountIdByComplaintData(args);
-	
+
 	const complaintParams = {
 		TableName: process.env.DYNAMODB_COMPLAINTS_TABLE,
 		Item: {
@@ -43,106 +58,109 @@ async function createComplaint(parent, args, context) {
 
 async function getAccountIdByComplaintData(data) {
 	let accountId = null;
-	
+
 	accountId = await getAccountIdByEmailAndDateOfBirth(data.originalCustomerEmail, data.originalCustomerDateOfBirth);
-	
+
 	if (accountId !== null) {
 		return accountId
 	}
-	
+
 	accountId = await getAccountIdByPostCodeAndDateOfBirth(data.originalCustomerPostCode, data.originalCustomerDateOfBirth);
-	
+
 	if (accountId !== null) {
 		return accountId
 	}
-	
+
 	accountId = await getAccountIdByMobilePhoneAndDateOfBirth(data.originalCustomerMobilePhoneNumber, data.originalCustomerDateOfBirth);
-	
+
 	if (accountId !== null) {
 		return accountId
 	}
-	
+
 	throw new Error('The customer details provided could not be matched.');
 }
 
-async function getAccountIdByEmailAndDateOfBirth(email, dateOfBirth){
+async function getAccountIdByEmailAndDateOfBirth(email, dateOfBirth) {
 	const params = {
 		TableName: process.env.DYNAMODB_CUSTOMER_TABLE,
 		IndexName: 'originalCustomerEmailDateOfBirth',
 		KeyConditionExpression: 'originalCustomerEmail = :originalCustomerEmail and originalCustomerDateOfBirth = :originalCustomerDateOfBirth',
-		ExpressionAttributeValues: { 
+		ExpressionAttributeValues: {
 			':originalCustomerEmail': email,
 			':originalCustomerDateOfBirth': dateOfBirth,
 		}
 	};
-	
+
 	try {
 		console.log('Attempting to match email and dob.');
 		const result = await dynamodb.query(params).promise();
 		console.log('Retrieve completed.');
-		
+
 		if (result.Items.length > 0) {
 			return result.Items[0].originalCustomerAccountId;
 		}
-		
+
 		return null;
-	} catch (e) {
-	 	console.error('Error retrieving complaints.', e);
-	 	throw new Error('Error retrieving complaints');
+	}
+	catch (e) {
+		console.error('Error retrieving complaints.', e);
+		throw new Error('Error retrieving complaints');
 	}
 }
 
-async function getAccountIdByPostCodeAndDateOfBirth(postCode, dateOfBirth){
+async function getAccountIdByPostCodeAndDateOfBirth(postCode, dateOfBirth) {
 	const params = {
 		TableName: process.env.DYNAMODB_CUSTOMER_TABLE,
 		IndexName: 'originalCustomerPostCodeDateOfBirth',
 		KeyConditionExpression: 'originalCustomerPostCode = :originalCustomerPostCode and originalCustomerDateOfBirth = :originalCustomerDateOfBirth',
-		ExpressionAttributeValues: { 
+		ExpressionAttributeValues: {
 			':originalCustomerPostCode': postCode,
 			':originalCustomerDateOfBirth': dateOfBirth,
 		}
 	};
-	
+
 	try {
 		console.log('Attempting to match postcode and dob.');
 		const result = await dynamodb.query(params).promise();
 		console.log('Retrieve completed.');
-		
+
 		if (result.Items.length > 0) {
 			return result.Items[0].originalCustomerAccountId;
 		}
-		
+
 		return null;
-	} catch (e) {
-	 	console.error('Error retrieving complaints.', e);
-	 	throw new Error('Error retrieving complaints');
+	}
+	catch (e) {
+		console.error('Error retrieving complaints.', e);
+		throw new Error('Error retrieving complaints');
 	}
 }
 
-async function getAccountIdByMobilePhoneAndDateOfBirth(mobilePhoneNumber, dateOfBirth){
+async function getAccountIdByMobilePhoneAndDateOfBirth(mobilePhoneNumber, dateOfBirth) {
 	const params = {
 		TableName: process.env.DYNAMODB_CUSTOMER_TABLE,
 		IndexName: 'originalCustomerMobilePhoneNumberDateOfBirth',
 		KeyConditionExpression: 'originalCustomerMobilePhoneNumber = :originalCustomerPostCode and originalCustomerDateOfBirth = :originalCustomerDateOfBirth',
-		ExpressionAttributeValues: { 
+		ExpressionAttributeValues: {
 			':originalCustomerPostCode': mobilePhoneNumber,
 			':originalCustomerDateOfBirth': dateOfBirth,
 		}
 	};
-	
+
 	try {
 		console.log('Attempting to match mobile number and dob.');
 		const result = await dynamodb.query(params).promise();
 		console.log('Retrieve completed.');
-		
+
 		if (result.Items.length > 0) {
 			return result.Items[0].originalCustomerAccountId;
 		}
-		
+
 		return null;
-	} catch (e) {
-	 	console.error('Error retrieving complaints.', e);
-	 	throw new Error('Error retrieving complaints');
+	}
+	catch (e) {
+		console.error('Error retrieving complaints.', e);
+		throw new Error('Error retrieving complaints');
 	}
 }
 
