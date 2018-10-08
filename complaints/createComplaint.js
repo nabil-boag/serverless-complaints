@@ -50,6 +50,18 @@ async function getAccountIdByComplaintData(data) {
 		return accountId
 	}
 	
+	accountId = await getAccountIdByPostCodeAndDateOfBirth(data.originalCustomerPostCode, data.originalCustomerDateOfBirth);
+	
+	if (accountId !== null) {
+		return accountId
+	}
+	
+	accountId = await getAccountIdByMobilePhoneAndDateOfBirth(data.originalCustomerMobilePhoneNumber, data.originalCustomerDateOfBirth);
+	
+	if (accountId !== null) {
+		return accountId
+	}
+	
 	throw new Error('The customer details provided could not be matched.');
 }
 
@@ -80,5 +92,58 @@ async function getAccountIdByEmailAndDateOfBirth(email, dateOfBirth){
 	}
 }
 
+async function getAccountIdByPostCodeAndDateOfBirth(postCode, dateOfBirth){
+	const params = {
+		TableName: process.env.DYNAMODB_CUSTOMER_TABLE,
+		IndexName: 'originalCustomerPostCodeDateOfBirth',
+		KeyConditionExpression: 'originalCustomerPostCode = :originalCustomerPostCode and originalCustomerDateOfBirth = :originalCustomerDateOfBirth',
+		ExpressionAttributeValues: { 
+			':originalCustomerPostCode': postCode,
+			':originalCustomerDateOfBirth': dateOfBirth,
+		}
+	};
+	
+	try {
+		console.log('Attempting to match postcode and dob.');
+		const result = await dynamodb.query(params).promise();
+		console.log('Retrieve completed.');
+		
+		if (result.Items.length > 0) {
+			return result.Items[0].originalCustomerAccountId;
+		}
+		
+		return null;
+	} catch (e) {
+	 	console.error('Error retrieving complaints.', e);
+	 	throw new Error('Error retrieving complaints');
+	}
+}
+
+async function getAccountIdByMobilePhoneAndDateOfBirth(mobilePhoneNumber, dateOfBirth){
+	const params = {
+		TableName: process.env.DYNAMODB_CUSTOMER_TABLE,
+		IndexName: 'originalCustomerMobilePhoneNumberDateOfBirth',
+		KeyConditionExpression: 'originalCustomerMobilePhoneNumber = :originalCustomerPostCode and originalCustomerDateOfBirth = :originalCustomerDateOfBirth',
+		ExpressionAttributeValues: { 
+			':originalCustomerPostCode': mobilePhoneNumber,
+			':originalCustomerDateOfBirth': dateOfBirth,
+		}
+	};
+	
+	try {
+		console.log('Attempting to match mobile number and dob.');
+		const result = await dynamodb.query(params).promise();
+		console.log('Retrieve completed.');
+		
+		if (result.Items.length > 0) {
+			return result.Items[0].originalCustomerAccountId;
+		}
+		
+		return null;
+	} catch (e) {
+	 	console.error('Error retrieving complaints.', e);
+	 	throw new Error('Error retrieving complaints');
+	}
+}
 
 module.exports.createComplaint = createComplaint;

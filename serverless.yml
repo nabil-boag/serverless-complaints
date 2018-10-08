@@ -144,7 +144,7 @@ resources:
           AttributeType: S
         - AttributeName: originalCustomerPostCode
           AttributeType: S
-        - AttributeName: originalCustomerMobilePhoneNumer
+        - AttributeName: originalCustomerMobilePhoneNumber
           AttributeType: S
         KeySchema:
         - AttributeName: originalCustomerAccountId
@@ -180,9 +180,9 @@ resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
-        - IndexName: originalCustomerMobilePhoneNumerDateOfBirth
+        - IndexName: originalCustomerMobilePhoneNumberDateOfBirth
           KeySchema:
-          - AttributeName: originalCustomerMobilePhoneNumer
+          - AttributeName: originalCustomerMobilePhoneNumber
             KeyType: HASH
           - AttributeName: originalCustomerDateOfBirth
             KeyType: RANGE

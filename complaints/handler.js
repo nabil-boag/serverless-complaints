@@ -31,14 +31,14 @@ const typeDefs = `
   	  originalCustomerEmail: String!,
   	  originalCustomerFirstName: String!, 
   	  originalCustomerLastName: String!, 
-  	  originalCustomerMobilePhoneNumer: String, 
+  	  originalCustomerMobilePhoneNumber: String, 
   	  originalCustomerPostCode: String, 
     ): Complaint!,
     createCustomer(
       originalCustomerAccountId: String!,
   	  originalCustomerDateOfBirth: String!, 
   	  originalCustomerEmail: String!,
-  	  originalCustomerMobilePhoneNumer: String, 
+  	  originalCustomerMobilePhoneNumber: String, 
   	  originalCustomerPostCode: String, 
     ): Customer!
   }
@@ -55,7 +55,7 @@ const typeDefs = `
     originalCustomerEmail: String!,
     originalCustomerFirstName: String!, 
     originalCustomerLastName: String!, 
-    originalCustomerMobilePhoneNumer: String, 
+    originalCustomerMobilePhoneNumber: String, 
     originalCustomerPostCode: String, 
   }
   
@@ -63,7 +63,7 @@ const typeDefs = `
   	originalCustomerAccountId: String!,
     originalCustomerDateOfBirth: String!, 
     originalCustomerEmail: String!,
-    originalCustomerMobilePhoneNumer: String!, 
+    originalCustomerMobilePhoneNumber: String!, 
     originalCustomerPostCode: String!, 
   }
 `;
